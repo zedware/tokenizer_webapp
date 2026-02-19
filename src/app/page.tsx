@@ -10,7 +10,7 @@ import { tokenizeText } from '@/lib/tokenize-client';
 import { TokenizerResult } from '@/lib/tokenizers/types';
 
 export default function Home() {
-  const [text, setText] = useState('');
+  const [text, setText] = useState('Transformer is a geat 变压器，楽しです！');
   const [selectedTokenizer, setSelectedTokenizer] = useState<TokenizerType>('openai-cl100k');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<TokenizerResult | null>(null);

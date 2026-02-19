@@ -1,4 +1,4 @@
-import { encoding_for_model, get_encoding } from '@dqbd/tiktoken';
+import { encodingForModel, getEncoding } from 'js-tiktoken';
 import { TokenizerResult, Token, TokenizerType } from './types';
 
 /**
@@ -15,13 +15,13 @@ export async function tokenizeWithOpenAI(
   try {
     switch (tokenizerType) {
       case 'openai-cl100k':
-        encoding = get_encoding('cl100k_base');
+        encoding = getEncoding('cl100k_base');
         break;
       case 'openai-p50k':
-        encoding = get_encoding('p50k_base');
+        encoding = getEncoding('p50k_base');
         break;
       case 'openai-r50k':
-        encoding = get_encoding('r50k_base');
+        encoding = getEncoding('r50k_base');
         break;
       default:
         throw new Error(`Unsupported OpenAI tokenizer type: ${tokenizerType}`);
@@ -39,8 +39,6 @@ export async function tokenizeWithOpenAI(
         value: id
       });
     }
-
-    encoding.free();
 
     const endTime = performance.now();
 
