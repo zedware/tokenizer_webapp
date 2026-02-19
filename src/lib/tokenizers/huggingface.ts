@@ -1,5 +1,5 @@
 import { TokenizerResult, Token, TokenizerType } from './types';
-import * as HfTokenizers from '@huggingface/tokenizers';
+import { AutoTokenizer } from '@huggingface/transformers'; // <-- Updated package
 
 /**
  * Tokenize text using HuggingFace tokenizers
@@ -9,31 +9,42 @@ export async function tokenizeWithHuggingFace(
   tokenizerType: TokenizerType
 ): Promise<TokenizerResult> {
   const startTime = performance.now();
-
   let tokenizer;
 
   try {
     switch (tokenizerType) {
       case 'huggingface-bert':
-        tokenizer = await HfTokenizers.Tokenizer.fromPretrained('bert-base-uncased');
+        tokenizer = await AutoTokenizer.from_pretrained('bert-base-uncased');
         break;
       case 'huggingface-gpt2':
-        tokenizer = await HfTokenizers.Tokenizer.fromPretrained('gpt2');
+        tokenizer = await AutoTokenizer.from_pretrained('gpt2');
         break;
       default:
         throw new Error(`Unsupported HuggingFace tokenizer type: ${tokenizerType}`);
     }
 
-    const encoded = await tokenizer.encode(text);
-    const ids = encoded.getIds();
+    // 1. Invoke the tokenizer to get the token IDs 
+    const { input_ids } = tokenizer(text);
+	const ids = Array.from(input_ids.data, Number);
+
+    // 2. Use the built-in method to map IDs back to their exact literal subword strings.
+    // (We use a fallback check because the method's location varies slightly between v2 and v3 of the library)
+    const rawTokens = tokenizer.model?.convert_ids_to_tokens 
+      ? tokenizer.model.convert_ids_to_tokens(ids) 
+      : tokenizer.convert_ids_to_tokens(ids);
+
     const tokens: Token[] = [];
 
+    // 3. Map the IDs to your Token array structure
     for (let i = 0; i < ids.length; i++) {
       const id = ids[i];
-      const token = encoded.getTokens()[i];
+      
+      // Fallback to decode if the id somehow isn't in the raw tokens map
+      const tokenText = rawTokens[i] ?? tokenizer.decode([id]);
+
       tokens.push({
         id,
-        text: token,
+        text: tokenText,
         value: id
       });
     }

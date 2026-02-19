@@ -57,7 +57,7 @@ export const TOKENIZERS: TokenizerInfo[] = [
   },
   {
     id: 'gemini',
-    name: 'Google Gemini',
+    name: 'Google Gemini(need API KEY)',
     description: 'Tokenizer for Google\'s Gemini models',
     provider: 'Google',
     modelFamily: 'Gemini'
