@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { DEFAULT_TEXT } from '@/config/appConfig';
 import Image from 'next/image';
 import TokenizerSelector from '@/components/TokenizerSelector';
 import TextInput from '@/components/TextInput';
@@ -10,7 +11,7 @@ import { tokenizeText } from '@/lib/tokenize-client';
 import { TokenizerResult } from '@/lib/tokenizers/types';
 
 export default function Home() {
-  const [text, setText] = useState('Transformer is a geat 变压器，楽しです！');
+  const [text, setText] = useState(DEFAULT_TEXT);
   const [selectedTokenizer, setSelectedTokenizer] = useState<TokenizerType>('openai-cl100k');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<TokenizerResult | null>(null);
