@@ -29,9 +29,9 @@ export async function tokenizeWithHuggingFace(
 
     // 2. Use the built-in method to map IDs back to their exact literal subword strings.
     // (We use a fallback check because the method's location varies slightly between v2 and v3 of the library)
-    const rawTokens = tokenizer.model?.convert_ids_to_tokens 
-      ? tokenizer.model.convert_ids_to_tokens(ids) 
-      : tokenizer.convert_ids_to_tokens(ids);
+    const rawTokens = (tokenizer.model as any)?.convert_ids_to_tokens 
+      ? (tokenizer.model as any).convert_ids_to_tokens(ids) 
+      : null;
 
     const tokens: Token[] = [];
 
@@ -39,8 +39,8 @@ export async function tokenizeWithHuggingFace(
     for (let i = 0; i < ids.length; i++) {
       const id = ids[i];
       
-      // Fallback to decode if the id somehow isn't in the raw tokens map
-      const tokenText = rawTokens[i] ?? tokenizer.decode([id]);
+      // Use pre-mapped tokens if available, otherwise decode
+      const tokenText = rawTokens?.[i] ?? tokenizer.decode([id]);
 
       tokens.push({
         id,

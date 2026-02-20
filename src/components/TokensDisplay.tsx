@@ -2,6 +2,7 @@ import { TokenizerResult, Token } from '@/lib/tokenizers/types';
 import { useEffect, useRef } from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { nightOwl } from 'react-syntax-highlighter/dist/cjs/styles/prism';
+import { getTokenColor } from '@/lib/tokenColors';
 
 interface TokensDisplayProps {
   result: TokenizerResult | null;
@@ -70,6 +71,28 @@ export default function TokensDisplay({ result, loading }: TokensDisplayProps) {
         </div>
       </div>
 
+      {/* Visual token stream */}
+      <div className="p-4 bg-gray-50 border-b overflow-x-auto">
+        <div className="flex flex-wrap gap-1">
+          {result.tokens.map((token, index) => {
+            const { bg, text } = getTokenColor(token.id);
+            return (
+              <span
+                key={index}
+                style={{
+                  backgroundColor: bg,
+                  color: text,
+                }}
+                className="px-2 py-1 rounded text-xs font-mono font-semibold whitespace-nowrap"
+                title={`Token ${token.id}: ${token.text}`}
+              >
+                {token.text.replace(/\n/g, '⏎').replace(/\s/g, '␣')}
+              </span>
+            );
+          })}
+        </div>
+      </div>
+
       <div
         ref={containerRef}
         className="overflow-auto max-h-[calc(100vh-24rem)]"
@@ -89,21 +112,30 @@ export default function TokensDisplay({ result, loading }: TokensDisplayProps) {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {result.tokens.map((token, index) => (
-              <tr key={index} className="hover:bg-gray-50">
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {token.id}
-                </td>
-                <td className="px-6 py-4 whitespace-pre-wrap text-sm font-mono">
-                  <span className="bg-blue-100 px-1 py-0.5 rounded">
-                    {token.text.replace(/\n/g, '⏎').replace(/\s/g, '␣')}
-                  </span>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {token.value !== undefined ? token.value : '—'}
-                </td>
-              </tr>
-            ))}
+            {result.tokens.map((token, index) => {
+              const { bg, text } = getTokenColor(token.id);
+              return (
+                <tr key={index} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {token.id}
+                  </td>
+                  <td className="px-6 py-4 whitespace-pre-wrap text-sm font-mono">
+                    <span
+                      style={{
+                        backgroundColor: bg,
+                        color: text,
+                      }}
+                      className="px-2 py-1 rounded inline-block font-semibold"
+                    >
+                      {token.text.replace(/\n/g, '⏎').replace(/\s/g, '␣')}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {token.value !== undefined ? token.value : '—'}
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
