@@ -34,7 +34,7 @@ This project is configured for easy deployment on [Railway](https://railway.app)
 
 1. Fork this repository
 2. Create a new project on Railway and connect it to your GitHub repository
-3. Add the required environment variables:
+3. Add the required environment variables (optional):
    - `OPENAI_API_KEY` - Your OpenAI API key
    - `NEXT_PUBLIC_GEMINI_API_KEY` - Your Google Gemini API key
    - `HUGGINGFACE_API_TOKEN` - Your HuggingFace API token
