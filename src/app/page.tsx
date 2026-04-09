@@ -106,6 +106,15 @@ export default function Home() {
             >
               tiktokenizer
             </a>
+            {' '}· Hosted on{' '}
+            <a
+              href="https://github.com/zedware/tokenizer_webapp/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 hover:underline"
+            >
+              GitHub
+            </a>
           </p>
         </footer>
       </div>

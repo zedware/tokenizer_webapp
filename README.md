@@ -42,6 +42,8 @@ This project is configured for easy deployment on [Railway](https://railway.app)
 
 Railway will automatically build and deploy your application.
 
+Here is an example deployment: [My Railway Deployment](https://tokenizerwebapp-production-1194.up.railway.app) .
+
 ## Technologies Used
 
 - Next.js
